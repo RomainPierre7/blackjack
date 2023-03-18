@@ -9,7 +9,7 @@ font_sys = "impact"
 
 # Pygame Initialization
 pygame.init()
-screen = pygame.display.set_mode((0, 0))
+screen = pygame.display.set_mode((500, 1000))
 width, height = pygame.display.get_surface().get_size()
 pygame.display.set_caption("BlackJack")
 screen.fill((20, 100, 0))
@@ -41,11 +41,13 @@ def update_screen(commands):
         image = card.get_image()
         image = pygame.transform.scale(image, (int((image.get_width() / image.get_height()) * height * 0.2), int(height * 0.2)))
         screen.blit(image, (150 + i * (image.get_width() + 30), height * 0.47))
-    font = pygame.font.SysFont(font_sys, 50)
+    size = 50
+    font = pygame.font.SysFont(font_sys, size)
     text = font.render(commands, True, (0, 0, 0))
     len = text.get_width()
-    while len > width * 0.8:
-        font = pygame.font.SysFont(font_sys, font.get_height() - 1)
+    while len > width * 0.9:
+        size -= 1
+        font = pygame.font.SysFont(font_sys, size)
         text = font.render(commands, True, (0, 0, 0))
         len = text.get_width()
     screen.blit(text, (width // 2 - len // 2, height * 0.8))
