@@ -44,6 +44,10 @@ def update_screen(commands):
     font = pygame.font.SysFont(font_sys, 50)
     text = font.render(commands, True, (0, 0, 0))
     len = text.get_width()
+    while len > width * 0.8:
+        font = pygame.font.SysFont(font_sys, font.get_height() - 1)
+        text = font.render(commands, True, (0, 0, 0))
+        len = text.get_width()
     screen.blit(text, (width // 2 - len // 2, height * 0.8))
     pygame.display.update()
 
@@ -107,6 +111,9 @@ def player_turn():
     while playing:
         if player_hand.best_value() == 0:
             over_21 = True
+        if player_hand.best_value() == 21:
+            double = True
+            new_card = True
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -116,14 +123,16 @@ def player_turn():
                     card = main_deck.draw_card()
                     player_hand.add_card(card)
                     new_card = True
-                if event.key == pygame.K_d and not double and not new_card and not over_21 and not black_jack:
+                if event.key == pygame.K_d and not double and not new_card and not over_21:
                     if player_bankroll >= player_bet:
                         player_bankroll -= player_bet
                         player_bet *= 2
                         double = True
                 if event.key == pygame.K_RETURN:
                     playing = False
-        if black_jack:
+        if black_jack and not new_card and not double:
+            update_screen("Black Jack! Press Enter to stand or D to double your bet")
+        elif black_jack and not new_card and double:
             update_screen("Black Jack! Press Enter to stand")
         elif over_21:
             update_screen("You went over 21, press Enter to stand")
@@ -145,10 +154,15 @@ def dealer_turn():
         update_screen("")
         time.sleep(1)
 
-def result_screen(text):
+def result_screen(text_to_display):
     screen.fill((20, 100, 0))
+    font = pygame.font.SysFont(font_sys, 50)
+    text = font.render(f"Dealer's Hand: {dealer_hand.value()}", True, (255, 255, 255))
+    screen.blit(text, (10, height * 0.05))
+    text = font.render(f"Player's Hand: {player_hand.value()}", True, (255, 255, 255))
+    screen.blit(text, (10, height * 0.1))
     font = pygame.font.SysFont(font_sys, 200)
-    text = font.render(text, True, (255, 255, 255))
+    text = font.render(text_to_display, True, (255, 255, 255))
     len = text.get_width()
     screen.blit(text, (width // 2 - len // 2, height * 0.2))
     font = pygame.font.SysFont(font_sys, 100)
@@ -173,9 +187,9 @@ def result():
     global player_bankroll, player_bet
     dealer = dealer_hand.best_value()
     player = player_hand.best_value()
-    if player > 21:
+    if player == 0:
         result_screen("You busted!")
-    elif dealer > 21:
+    elif dealer == 0:
         player_bankroll += player_bet * 2
         result_screen("Dealer busted!")
     elif dealer > player:
