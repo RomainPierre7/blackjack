@@ -9,7 +9,7 @@ font_sys = "impact"
 
 # Pygame Initialization
 pygame.init()
-screen = pygame.display.set_mode((500, 1000))
+screen = pygame.display.set_mode((0, 0))
 width, height = pygame.display.get_surface().get_size()
 pygame.display.set_caption("BlackJack")
 screen.fill((20, 100, 0))
