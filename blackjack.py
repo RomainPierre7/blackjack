@@ -5,6 +5,7 @@ import deck
 # Settings
 player_bankroll = 50
 bet_min = 2
+font_sys = "impact"
 
 # Pygame Initialization
 pygame.init()
@@ -17,14 +18,14 @@ pygame.display.update()
 # Functions
 def update_screen(commands):
     screen.fill((20, 100, 0))
-    font = pygame.font.SysFont("comicsansms", 50)
+    font = pygame.font.SysFont(font_sys, 50)
     text = font.render(f"Bankroll: ${player_bankroll}", True, (255, 255, 255))
     screen.blit(text, (10, 10))
-    font = pygame.font.SysFont("comicsansms", 75)
+    font = pygame.font.SysFont(font_sys, 75)
     text = font.render(f"Bet: ${player_bet}", True, (255, 255, 255))
     len = text.get_width()
     screen.blit(text, (width // 2 - len // 2, 10))
-    font = pygame.font.SysFont("comicsansms", 50)
+    font = pygame.font.SysFont(font_sys, 50)
     text = font.render(f"Minimal bet: ${bet_min}", True, (255, 255, 255))
     len = text.get_width()
     screen.blit(text, (width - len - 10, 10))
@@ -34,13 +35,13 @@ def update_screen(commands):
     screen.blit(text, (10, height * 0.4))
     for i, card in enumerate(dealer_hand.get_cards()):
         image = card.get_image()
-        image = pygame.transform.scale(image, (int(image.get_width() * 0.4), int(image.get_height() * 0.4)))
-        screen.blit(image, (150 + i * 250,  height * 0.1 + 50))
+        image = pygame.transform.scale(image, (int((image.get_width() / image.get_height()) * height * 0.2), int(height * 0.2)))
+        screen.blit(image, (150 + i * 250,  height * 0.15))
     for i, card in enumerate(player_hand.get_cards()):
         image = card.get_image()
-        image = pygame.transform.scale(image, (int(image.get_width() * 0.4), int(image.get_height() * 0.4)))
-        screen.blit(image, (150 + i * 250, height * 0.4 + 50))
-    font = pygame.font.SysFont("comicsansms", 50)
+        image = pygame.transform.scale(image, (int((image.get_width() / image.get_height()) * height * 0.2), int(height * 0.2)))
+        screen.blit(image, (150 + i * 250, height * 0.45))
+    font = pygame.font.SysFont(font_sys, 50)
     text = font.render(commands, True, (0, 0, 0))
     len = text.get_width()
     screen.blit(text, (width // 2 - len // 2, height * 0.8))
@@ -146,16 +147,16 @@ def dealer_turn():
 
 def result_screen(text):
     screen.fill((20, 100, 0))
-    font = pygame.font.SysFont("comicsansms", 200)
+    font = pygame.font.SysFont(font_sys, 200)
     text = font.render(text, True, (255, 255, 255))
     screen.blit(text, (50, 400))
-    font = pygame.font.SysFont("comicsansms", 100)
+    font = pygame.font.SysFont(font_sys, 100)
     text = font.render(f"Your bankroll is now ${player_bankroll}", True, (255, 255, 255))
     screen.blit(text, (50, 700))
-    font = pygame.font.SysFont("comicsansms", 50)
+    font = pygame.font.SysFont(font_sys, 50)
     text = font.render(f"Press Enter to continue", True, (255, 255, 255))
     len = text.get_width()
-    screen.blit(text, (800 - len // 2, 900))
+    screen.blit(text, (width // 2 - len // 2, 900))
     pygame.display.update()
     while True:
         for event in pygame.event.get():
@@ -186,10 +187,10 @@ def result():
 
 def game_over():
     screen.fill((20, 100, 0))
-    font = pygame.font.SysFont("comicsansms", 200)
+    font = pygame.font.SysFont(font_sys, 200)
     text = font.render(f"You are out of money !", True, (255, 255, 255))
     screen.blit(text, (50, 400))
-    font = pygame.font.SysFont("comicsansms", 100)
+    font = pygame.font.SysFont(font_sys, 100)
     text = font.render(f"Press enter to quit", True, (255, 255, 255))
     screen.blit(text, (500, 600))
     pygame.display.update()
