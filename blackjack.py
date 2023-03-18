@@ -9,7 +9,7 @@ font_sys = "impact"
 
 # Pygame Initialization
 pygame.init()
-screen = pygame.display.set_mode((0, 0))
+screen = pygame.display.set_mode((2560, 1600))
 width, height = pygame.display.get_surface().get_size()
 pygame.display.set_caption("BlackJack")
 screen.fill((20, 100, 0))
@@ -36,11 +36,11 @@ def update_screen(commands):
     for i, card in enumerate(dealer_hand.get_cards()):
         image = card.get_image()
         image = pygame.transform.scale(image, (int((image.get_width() / image.get_height()) * height * 0.2), int(height * 0.2)))
-        screen.blit(image, (150 + i * 250,  height * 0.15))
+        screen.blit(image, (150 + i * (image.get_width() + 30),  height * 0.17))
     for i, card in enumerate(player_hand.get_cards()):
         image = card.get_image()
         image = pygame.transform.scale(image, (int((image.get_width() / image.get_height()) * height * 0.2), int(height * 0.2)))
-        screen.blit(image, (150 + i * 250, height * 0.45))
+        screen.blit(image, (150 + i * (image.get_width() + 30), height * 0.47))
     font = pygame.font.SysFont(font_sys, 50)
     text = font.render(commands, True, (0, 0, 0))
     len = text.get_width()
@@ -102,7 +102,7 @@ def player_turn():
     black_jack = False
     if player_hand.best_value() == 21:
         black_jack = True
-    if player_bet * 2 > player_bankroll:
+    if player_bet > player_bankroll:
         double = True
     while playing:
         if player_hand.best_value() == 0:
@@ -117,7 +117,7 @@ def player_turn():
                     player_hand.add_card(card)
                     new_card = True
                 if event.key == pygame.K_d and not double and not new_card and not over_21 and not black_jack:
-                    if player_bankroll >= player_bet * 2:
+                    if player_bankroll >= player_bet:
                         player_bankroll -= player_bet
                         player_bet *= 2
                         double = True
@@ -149,14 +149,16 @@ def result_screen(text):
     screen.fill((20, 100, 0))
     font = pygame.font.SysFont(font_sys, 200)
     text = font.render(text, True, (255, 255, 255))
-    screen.blit(text, (50, 400))
+    len = text.get_width()
+    screen.blit(text, (width // 2 - len // 2, height * 0.2))
     font = pygame.font.SysFont(font_sys, 100)
     text = font.render(f"Your bankroll is now ${player_bankroll}", True, (255, 255, 255))
-    screen.blit(text, (50, 700))
+    len = text.get_width()
+    screen.blit(text, (width // 2 - len // 2, height * 0.5))
     font = pygame.font.SysFont(font_sys, 50)
     text = font.render(f"Press Enter to continue", True, (255, 255, 255))
     len = text.get_width()
-    screen.blit(text, (width // 2 - len // 2, 900))
+    screen.blit(text, (width // 2 - len // 2, height * 0.8))
     pygame.display.update()
     while True:
         for event in pygame.event.get():
@@ -189,10 +191,12 @@ def game_over():
     screen.fill((20, 100, 0))
     font = pygame.font.SysFont(font_sys, 200)
     text = font.render(f"You are out of money !", True, (255, 255, 255))
-    screen.blit(text, (50, 400))
+    len = text.get_width()
+    screen.blit(text, (width // 2 - len // 2, height * 0.2))
     font = pygame.font.SysFont(font_sys, 100)
     text = font.render(f"Press enter to quit", True, (255, 255, 255))
-    screen.blit(text, (500, 600))
+    len = text.get_width()
+    screen.blit(text, (width // 2 - len // 2, height * 0.5))
     pygame.display.update()
     while True:
         for event in pygame.event.get():
