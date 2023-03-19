@@ -193,6 +193,9 @@ def result():
     elif dealer == 0:
         player_bankroll += player_bet * 2
         result_screen("Dealer busted!")
+    elif player == 21 and dealer != 21:
+        player_bankroll += player_bet * 2
+        result_screen("Black Jack!")
     elif dealer > player:
         result_screen("Dealer wins!")
     elif dealer < player:
