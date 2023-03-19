@@ -114,7 +114,6 @@ def player_turn():
         if player_hand.best_value() == 0:
             over_21 = True
         if player_hand.best_value() == 21:
-            double = True
             new_card = True
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
