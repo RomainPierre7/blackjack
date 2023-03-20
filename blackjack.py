@@ -103,13 +103,14 @@ def player_turn():
     global player_bankroll, player_bet
     playing = True
     double = False
+    double_possible = True
     new_card = False
     over_21 = False
     black_jack = False
     if player_hand.best_value() == 21:
         black_jack = True
     if player_bet > player_bankroll:
-        double = True
+        double_possible = False
     while playing:
         if player_hand.best_value() == 0:
             over_21 = True
@@ -124,24 +125,24 @@ def player_turn():
                     card = main_deck.draw_card()
                     player_hand.add_card(card)
                     new_card = True
-                if event.key == pygame.K_d and not double and not new_card and not over_21:
+                if event.key == pygame.K_d and not double and not new_card and not over_21 and double_possible:
                     if player_bankroll >= player_bet:
                         player_bankroll -= player_bet
                         player_bet *= 2
                         double = True
                 if event.key == pygame.K_RETURN:
                     playing = False
-        if black_jack and not new_card and not double:
+        if black_jack and not new_card and double_possible:
             update_screen("Black Jack! Press Enter to stand or D to double your bet")
-        elif black_jack and not new_card and double:
+        elif black_jack and not new_card and not double_possible:
             update_screen("Black Jack! Press Enter to stand")
         elif over_21:
             update_screen("You went over 21, press Enter to stand")
-        elif double and not new_card:
+        elif (double or not double_possible) and not new_card:
             update_screen("Press C to get one more card, press Enter to stand")
         elif double and new_card:
             update_screen("Press Enter to stand")
-        elif not double and not new_card:
+        elif (not double and double_possible) and not new_card:
             update_screen("Press D to double your bet (max one more card), C to get one more card, Enter to stand")
         elif not double and new_card:
             update_screen("Press C to get one more card, press Enter to stand")
