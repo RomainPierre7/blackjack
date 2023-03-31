@@ -115,7 +115,7 @@ def player_turn():
         if player_hand.best_value() == 0:
             over_21 = True
         if player_hand.best_value() == 21:
-            new_card = True
+            black_jack = True
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -132,7 +132,7 @@ def player_turn():
                         double = True
                 if event.key == pygame.K_RETURN:
                     playing = False
-        if black_jack and not new_card and double_possible:
+        if black_jack and not new_card and double_possible and not double:
             update_screen("Black Jack! Press Enter to stand or D to double your bet")
         elif black_jack and not new_card and not double_possible:
             update_screen("Black Jack! Press Enter to stand")
